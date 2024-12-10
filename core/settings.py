@@ -14,8 +14,9 @@ from pathlib import Path
 import environ
 
 # 初始化環境變數
+BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env(env_file=BASE_DIR / ".env")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#m)-(!gb58s2rs5n+q_i*p_-i=jpe7%n0#l93=%g+!yum4i890"
+SECRET_KEY = env("SECRET_KEY", default="your-default-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -82,11 +83,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "mydatabase",  # 資料庫名稱
-        "USER": "myuser",  # 使用者名稱
-        "PASSWORD": "mypassword",  # 密碼
-        "HOST": "localhost",  # 主機名
-        "PORT": "3306",  # 預設埠號
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
